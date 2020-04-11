@@ -49,7 +49,7 @@ Test Result
 ## Character Annotations
 ![Characters Annotations](https://github.com/docongminh/Simple-google-vision-api/blob/master/image_test/char_rect_test.jpg)
 
-## Image Sizing suggestion
+## Image Suggestion Resizing
 
 To enable accurate image detection within the Google Cloud Vision API, images should generally be a minimum of 640 x 480 pixels (about 300k pixels). Full details for different types of Vision API Feature requests are shown below:
 
