@@ -39,7 +39,7 @@ Text Detection
 
 Test Result
 ```bash
-~ python test.py
+~ python test.py --gt path/folder/gt --output path/folder/contain/result/test --number_test number/of/images/use/test
 ```
 
 # Result
