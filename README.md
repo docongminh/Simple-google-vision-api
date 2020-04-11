@@ -2,13 +2,7 @@
 
 ## Description
 
-Example codes has following features:
-
-* Face Detection
-* Landmark Detection
-* Logo Detection
-* Label Detection
-* Text Detection
+Here Script use `Google Vision api` to extract `Text Annotations` in images.
 
 ## Requirement
 
@@ -44,8 +38,10 @@ $ python vision.py --images path/to/folder/contain/images
 ```
 
 # Result
+## Words Annotations
 ![Words Annotations](https://github.com/docongminh/Simple-google-vision-api/blob/master/image_test/word_rect_test.jpg)
 
+## Character Annotations
 ![Characters Annotations](https://github.com/docongminh/Simple-google-vision-api/blob/master/image_test/char_rect_test.jpg)
 
 ## Image Sizing suggestion
