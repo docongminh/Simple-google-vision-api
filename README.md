@@ -34,12 +34,12 @@ export GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/credentials-key.json
 Text Detection
 
 ```bash
-~ python vision.py --images path/to/folder/contain/images 
+~ python vision.py --images ./images 
 ```
 
 Test Result
 ```bash
-~ python test.py
+~ python test.py --gt ./ --output ./image_test --number_test 2
 ```
 
 # Result
