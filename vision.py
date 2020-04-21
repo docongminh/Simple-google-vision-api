@@ -100,7 +100,7 @@ if __name__ == '__main__':
     path_images = './images'
     # file save result annotaion
     parser = argparse.ArgumentParser()
-    parser.add_argument('--images', type=str, default='./images')
+    parser.add_argument('--images', type=str, default='./data/images')
 
     FLAGS = parser.parse_args()
     # list image from 
