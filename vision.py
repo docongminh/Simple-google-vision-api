@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import json
 import os
 import glob
@@ -7,6 +5,7 @@ import pickle
 from tqdm import tqdm
 import h5py
 import argparse
+import logging
 import requests as r
 from base64 import b64encode
 
@@ -96,19 +95,20 @@ def request_vision_api(image, api_key, b64=True):
 if __name__ == '__main__':
 
     API_KEY = 'AIzaSyCUHe6jQ9-27YmSfpVGXK7oVUOOUdm3b88'
-    # path to folder contain images
-    path_images = './images'
     # file save result annotaion
     parser = argparse.ArgumentParser()
     parser.add_argument('--images', type=str, default='./data/images')
-
     FLAGS = parser.parse_args()
     # list image from 
     images = glob.glob(FLAGS.images + '/*')
-
     image_annotations = list()
+    # logging 
+    logging.basicConfig(filename='log_vision.log',
+                            filemode='a',
+                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                            datefmt='%H:%M:%S',
+                            level=logging.DEBUG)
     for image in tqdm(images):
-        print("image: ", image)
         # list contain name_image, words_bboxs, texts, characters_bboxs per image
         if isinstance(image, str):
             # get image's name
@@ -182,8 +182,8 @@ if __name__ == '__main__':
             image_annotations.append([_name, all_words_bboxs, all_texts, all_chars_bboxs])
 
         else:
-            print("[ERROR] - {} is not path to image. Please check type path again".format(image))
+            logging.error("Logging load data", exc_info=True)
             continue
     # print(all_chars_bboxs)
-    with open('gt.pkl', 'wb') as pkl_file:
+    with open('output/gt.pkl', 'wb') as pkl_file:
         pickle.dump(image_annotations, pkl_file)
