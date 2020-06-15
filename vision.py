@@ -109,79 +109,80 @@ if __name__ == '__main__':
                             datefmt='%H:%M:%S',
                             level=logging.DEBUG)
     for image in tqdm(images):
-        # list contain name_image, words_bboxs, texts, characters_bboxs per image
-        if isinstance(image, str):
-            # get image's name
-            _name = image.split('/')[-1]
-            # request google api
-            print("[INFO] Get response image: {}".format(_name))
-            resp = request_vision_api(image, API_KEY, b64=False)
-            # get result
-            dict_google_response = json.loads(resp.content)
-            # get response
-            response = dict_google_response['responses'][0]
+        try:
+            # list contain name_image, words_bboxs, texts, characters_bboxs per image
+            if isinstance(image, str):
+                # get image's name
+                _name = image.split('/')[-1]
+                # request google api
+                print("[INFO] Get response image: {}".format(_name))
+                resp = request_vision_api(image, API_KEY, b64=False)
+                # get result
+                dict_google_response = json.loads(resp.content)
+                # get response
+                response = dict_google_response['responses'][0]
 
-            # get text annotaion, get word bboxs -> type []
-            text_annotation = response['textAnnotations']
-            all_words_bboxs = list()
-            all_texts = list()
-            
-            for idx, each_word in enumerate(text_annotation):
-                # storage annotation word per image
-                word = list()
-                # text_annotation[0] is description full text in image, don't get if not use
-                if "locale" in each_word:
-                    continue
-                else:
-                    word_detail = each_word['boundingPoly']
-                    text = each_word['description']
-                    vertices = word_detail['vertices']  # type list
-                    # get four points coords
-                    if len(text) > 0:
-                        left_top, right_top, right_dow, left_dow = vertices[0], vertices[1], vertices[2], vertices[3]
-                        # get value x, y - > [x, y]
-                        word.append(list(left_top.values()))
-                        word.append(list(right_top.values()))
-                        word.append(list(right_dow.values()))
-                        word.append(list(left_dow.values()))
-                        #
-                        all_words_bboxs.append(word)
-                        all_texts.append(text)
-                    else:
+                # get text annotaion, get word bboxs -> type []
+                text_annotation = response['textAnnotations']
+                all_words_bboxs = list()
+                all_texts = list()
+                
+                for idx, each_word in enumerate(text_annotation):
+                    # storage annotation word per image
+                    word = list()
+                    # text_annotation[0] is description full text in image, don't get if not use
+                    if "locale" in each_word:
                         continue
+                    else:
+                        word_detail = each_word['boundingPoly']
+                        text = each_word['description']
+                        vertices = word_detail['vertices']  # type list
+                        # get four points coords
+                        if len(text) > 0:
+                            left_top, right_top, right_dow, left_dow = vertices[0], vertices[1], vertices[2], vertices[3]
+                            # get value x, y - > [x, y]
+                            word.append(list(left_top.values()))
+                            word.append(list(right_top.values()))
+                            word.append(list(right_dow.values()))
+                            word.append(list(left_dow.values()))
+                            #
+                            all_words_bboxs.append(word)
+                            all_texts.append(text)
+                        else:
+                            continue
 
-            # get full text annotation (characters annotations)
-            full_text_ann = response['fullTextAnnotation']
-            all_chars_bboxs = list()
-            pages = full_text_ann['pages']
-            for page in pages:
-                for block in page['blocks']:
-                    for para in block['paragraphs']:
-                        for _word in para['words']:
-                            for char in _word['symbols']:  
-                                if char['text'] in allow_text:
-                                    _char = list()
-                                    # get four points char bboxs
-                                    left_top_char, right_top_char, right_dow_char, left_dow_char = \
-                                                        char['boundingBox']['vertices'][0],\
-                                                        char['boundingBox']['vertices'][1],\
-                                                        char['boundingBox']['vertices'][2],\
-                                                        char['boundingBox']['vertices'][3],\
-                                    # get value x, y - > [x, y]
-                                    
-                                    _char.append(list(left_top_char.values()))
-                                    _char.append(list(right_top_char.values()))
-                                    _char.append(list(right_dow_char.values()))
-                                    _char.append(list(left_dow_char.values()))
-                                    # print({char['text']: _char})
-                                    #
-                                    all_chars_bboxs.append(_char)
-                                else:
-                                    continue
+                # get full text annotation (characters annotations)
+                full_text_ann = response['fullTextAnnotation']
+                all_chars_bboxs = list()
+                pages = full_text_ann['pages']
+                for page in pages:
+                    for block in page['blocks']:
+                        for para in block['paragraphs']:
+                            for _word in para['words']:
+                                for char in _word['symbols']:  
+                                    if char['text'] in allow_text:
+                                        _char = list()
+                                        # get four points char bboxs
+                                        left_top_char, right_top_char, right_dow_char, left_dow_char = \
+                                                            char['boundingBox']['vertices'][0],\
+                                                            char['boundingBox']['vertices'][1],\
+                                                            char['boundingBox']['vertices'][2],\
+                                                            char['boundingBox']['vertices'][3],\
+                                        # get value x, y - > [x, y]
+                                        
+                                        _char.append(list(left_top_char.values()))
+                                        _char.append(list(right_top_char.values()))
+                                        _char.append(list(right_dow_char.values()))
+                                        _char.append(list(left_dow_char.values()))
+                                        # print({char['text']: _char})
+                                        #
+                                        all_chars_bboxs.append(_char)
+                                    else:
+                                        continue
 
-            image_annotations.append([_name, all_words_bboxs, all_texts, all_chars_bboxs])
+                image_annotations.append([_name, all_words_bboxs, all_texts, all_chars_bboxs])
 
-        else:
+        except Exception as e:
             logging.error("Logging load data", exc_info=True)
             continue
     # print(all_chars_bboxs)
