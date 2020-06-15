@@ -185,5 +185,5 @@ if __name__ == '__main__':
             logging.error("Logging load data", exc_info=True)
             continue
     # print(all_chars_bboxs)
-    with open('output/gt.pkl', 'wb') as pkl_file:
+    with open('gt.pkl', 'wb') as pkl_file:
         pickle.dump(image_annotations, pkl_file)
