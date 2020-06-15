@@ -42,6 +42,11 @@ Test Result
 ~ python test.py --gt ./ --output ./image_test --number_test 2
 ```
 
+Convert to Pascal VOC data format
+```bash
+~ python convert_pascal_format.py --output output --input images --gt_path gt.pkl
+```
+
 # Result
 ## Words Annotations
 ![Words Annotations](https://github.com/docongminh/Simple-google-vision-api/blob/master/image_test/word_rect_test.jpg)
