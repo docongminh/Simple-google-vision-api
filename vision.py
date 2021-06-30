@@ -94,7 +94,7 @@ def request_vision_api(image, api_key, b64=True):
 
 if __name__ == '__main__':
 
-    API_KEY = 'AIzaSyCUHe6jQ9-27YmSfpVGXK7oVUOOUdm3b88'
+    API_KEY = ''
     # file save result annotaion
     parser = argparse.ArgumentParser()
     parser.add_argument('--images', type=str, default='./data/images')
